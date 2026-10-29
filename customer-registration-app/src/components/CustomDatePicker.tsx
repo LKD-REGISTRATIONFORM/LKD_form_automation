@@ -49,15 +49,14 @@ export default function CustomDatePicker({
 }: CustomDatePickerProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Parse existing value or fallback to today/maxDate
-  const initialDate = parseDateString(value) || (maxDate && maxDate < new Date() ? maxDate : new Date());
+  const initialDate =
+    parseDateString(value) ||
+    (maxDate && maxDate < new Date() ? maxDate : new Date());
   const [displayYear, setDisplayYear] = useState(initialDate.getFullYear());
-  const [displayMonth, setDisplayMonth] = useState(initialDate.getMonth()); // 0-11
+  const [displayMonth, setDisplayMonth] = useState(initialDate.getMonth());
   const [showYearPicker, setShowYearPicker] = useState(false);
 
-  // Auto-format DD/MM/YYYY while typing manually
   function handleManualChange(text: string) {
-    // Keep only numbers
     const cleaned = text.replace(/\D/g, "").slice(0, 8);
     let formatted = "";
 
@@ -119,18 +118,15 @@ export default function CustomDatePicker({
     setModalVisible(false);
   }
 
-  // Days calculation for calendar grid
   const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
-  const firstDayOfWeek = new Date(displayYear, displayMonth, 1).getDay(); // 0 = Sun
+  const firstDayOfWeek = new Date(displayYear, displayMonth, 1).getDay();
 
   const days: Array<{ day: number | null; disabled: boolean; isSelected: boolean }> = [];
 
-  // Empty leading days
   for (let i = 0; i < firstDayOfWeek; i++) {
     days.push({ day: null, disabled: false, isSelected: false });
   }
 
-  // Month days
   const selectedDate = parseDateString(value);
   for (let d = 1; d <= daysInMonth; d++) {
     const current = new Date(displayYear, displayMonth, d);
@@ -157,7 +153,6 @@ export default function CustomDatePicker({
     days.push({ day: d, disabled, isSelected });
   }
 
-  // Generate Year List for Fast Picker (e.g. 1920 to 2030)
   const currentYear = new Date().getFullYear();
   const startYear = minDate ? minDate.getFullYear() : 1920;
   const endYear = maxDate ? maxDate.getFullYear() : currentYear + 5;
@@ -206,7 +201,6 @@ export default function CustomDatePicker({
           />
 
           <View style={styles.modalCard}>
-            {/* Modal Header */}
             <View style={styles.headerRow}>
               <Text style={styles.modalTitle}>{title}</Text>
               <Pressable
@@ -218,7 +212,6 @@ export default function CustomDatePicker({
               </Pressable>
             </View>
 
-            {/* Month & Year Navigation */}
             <View style={styles.navRow}>
               <Pressable
                 onPress={prevMonth}
@@ -249,7 +242,6 @@ export default function CustomDatePicker({
               </Pressable>
             </View>
 
-            {/* Quick Year Selection Overlay */}
             {showYearPicker ? (
               <ScrollView
                 style={styles.yearScroll}
@@ -280,7 +272,6 @@ export default function CustomDatePicker({
               </ScrollView>
             ) : (
               <>
-                {/* Weekday headers */}
                 <View style={styles.weekdayRow}>
                   {WEEKDAY_NAMES.map((w, index) => (
                     <Text key={index} style={styles.weekdayText}>
@@ -289,7 +280,6 @@ export default function CustomDatePicker({
                   ))}
                 </View>
 
-                {/* Day Grid */}
                 <View style={styles.dayGrid}>
                   {days.map((item, index) => {
                     if (item.day === null) {
@@ -321,7 +311,6 @@ export default function CustomDatePicker({
                   })}
                 </View>
 
-                {/* Quick actions footer */}
                 <View style={styles.modalFooter}>
                   {(!maxDate || maxDate >= new Date()) &&
                     (!minDate || minDate <= new Date()) && (
