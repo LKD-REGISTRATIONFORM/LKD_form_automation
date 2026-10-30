@@ -52,6 +52,17 @@ class CustomerCreate(BaseModel):
             raise ValueError("Date of birth cannot be in the future")
         return value
 
+    @field_validator("mobile_no")
+    @classmethod
+    def validate_mobile(cls, value):
+        if value is not None and (
+            len(value) != 10 or not value.isdigit() or value[0] not in "6789"
+        ):
+            raise ValueError(
+                "Mobile number must be 10 digits starting with 6, 7, 8 or 9"
+            )
+        return value
+
     @field_validator("pincode")
     @classmethod
     def validate_pincode(cls, value):

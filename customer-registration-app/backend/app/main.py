@@ -1,18 +1,26 @@
 
+import logging
 from contextlib import asynccontextmanager
 
+import psycopg
 from fastapi import FastAPI, HTTPException
 
 from app.database import check_db_connection
 from app.init_db import create_tables
 from app.routes.customers import router as customers_router
 
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Create initial tables during development.
     # We will replace this with Alembic migrations later.
-    create_tables()
+    try:
+        create_tables()
+    except psycopg.Error:
+        # Keep the API running so /health/db can report the problem.
+        logger.exception("Could not create tables; is PostgreSQL running?")
     yield
 
 
