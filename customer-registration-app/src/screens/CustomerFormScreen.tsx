@@ -41,7 +41,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
 
   const [formData, setFormData] = useState<CustomerFormData>({
     ...INITIAL_FORM_DATA,
-    campDate: todayFormatted,
+    camp_date: todayFormatted,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -60,7 +60,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
     const updatedData = { ...formData, [field]: value };
 
     // Automatic Age Calculation from Date of Birth
-    if (field === "dob" && typeof value === "string") {
+    if (field === "date_of_birth" && typeof value === "string") {
       const calculated = calculateAgeFromDob(value);
       if (calculated !== null && calculated >= 0 && calculated <= 120) {
         updatedData.age = String(calculated);
@@ -94,7 +94,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
   function handleReset() {
     setFormData({
       ...INITIAL_FORM_DATA,
-      campDate: formatDate(new Date()),
+      camp_date: formatDate(new Date()),
     });
     setErrors({});
     setHasAttemptedSubmit(false);
@@ -223,16 +223,15 @@ export default function CustomerFormScreen({ onBack }: Props) {
               label={FORM_STRINGS.dateLabel}
               subLabel={FORM_STRINGS.dateSubLabel}
               required
-              error={errors.campDate}
-              hint={FORM_STRINGS.dateHint}
+              error={errors.camp_date}
             >
               <CustomDatePicker
-                value={formData.campDate}
-                onChangeDate={(v) => handleFieldChange("campDate", v)}
+                value={formData.camp_date}
+                onChangeDate={(v) => handleFieldChange("camp_date", v)}
                 placeholder={FORM_STRINGS.dobPlaceholder}
                 title={FORM_STRINGS.datePickerTitle}
                 maxDate={new Date()}
-                hasError={Boolean(errors.campDate)}
+                hasError={Boolean(errors.camp_date)}
               />
             </FormField>
           </View>
@@ -242,11 +241,11 @@ export default function CustomerFormScreen({ onBack }: Props) {
               label={FORM_STRINGS.srNoLabel}
               subLabel={FORM_STRINGS.srNoSubLabel}
               optional
-              error={errors.srNo}
+              error={errors.sr_no}
             >
               <TextInput
-                value={formData.srNo}
-                onChangeText={(v) => handleFieldChange("srNo", v)}
+                value={formData.sr_no}
+                onChangeText={(v) => handleFieldChange("sr_no", v)}
                 placeholder={FORM_STRINGS.srNoPlaceholder}
                 placeholderTextColor={COLORS.placeholder}
                 style={styles.input}
@@ -286,16 +285,16 @@ export default function CustomerFormScreen({ onBack }: Props) {
           label={FORM_STRINGS.fullNameLabel}
           subLabel={FORM_STRINGS.fullNameSubLabel}
           required
-          error={errors.fullName}
+          error={errors.full_name}
           hint={FORM_STRINGS.fullNameHint}
         >
           <TextInput
-            value={formData.fullName}
-            onChangeText={(v) => handleFieldChange("fullName", v)}
+            value={formData.full_name}
+            onChangeText={(v) => handleFieldChange("full_name", v)}
             placeholder={FORM_STRINGS.fullNamePlaceholder}
             placeholderTextColor={COLORS.placeholder}
             autoCapitalize="words"
-            style={[styles.input, errors.fullName && styles.inputError]}
+            style={[styles.input, errors.full_name && styles.inputError]}
           />
         </FormField>
 
@@ -306,16 +305,15 @@ export default function CustomerFormScreen({ onBack }: Props) {
               label={FORM_STRINGS.dobLabel}
               subLabel={FORM_STRINGS.dobSubLabel}
               required
-              error={errors.dob}
-              hint={FORM_STRINGS.dobHint}
+              error={errors.date_of_birth}
             >
               <CustomDatePicker
-                value={formData.dob}
-                onChangeDate={(v) => handleFieldChange("dob", v)}
+                value={formData.date_of_birth}
+                onChangeDate={(v) => handleFieldChange("date_of_birth", v)}
                 placeholder={FORM_STRINGS.dobPlaceholder}
                 title={FORM_STRINGS.dobPickerTitle}
                 maxDate={new Date()}
-                hasError={Boolean(errors.dob)}
+                hasError={Boolean(errors.date_of_birth)}
               />
             </FormField>
           </View>
@@ -326,7 +324,6 @@ export default function CustomerFormScreen({ onBack }: Props) {
               subLabel={FORM_STRINGS.ageSubLabel}
               required
               error={errors.age}
-              hint={FORM_STRINGS.ageHint}
             >
               <TextInput
                 value={formData.age}
@@ -385,7 +382,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
             <FormField
               label={FORM_STRINGS.casteLabel}
               subLabel={FORM_STRINGS.casteSubLabel}
-              optional
+              required
               error={errors.caste}
             >
               <TextInput
@@ -424,7 +421,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
             <FormField
               label={FORM_STRINGS.religionLabel}
               subLabel={FORM_STRINGS.religionSubLabel}
-              optional
+              required
               error={errors.religion}
             >
               <CustomDropdown
@@ -443,14 +440,14 @@ export default function CustomerFormScreen({ onBack }: Props) {
               label={FORM_STRINGS.standardOrOccupationLabel}
               subLabel={FORM_STRINGS.standardOrOccupationSubLabel}
               required
-              error={errors.standardOrOccupation}
+              error={errors.standard_occupation}
             >
               <TextInput
-                value={formData.standardOrOccupation}
-                onChangeText={(v) => handleFieldChange("standardOrOccupation", v)}
+                value={formData.standard_occupation}
+                onChangeText={(v) => handleFieldChange("standard_occupation", v)}
                 placeholder={FORM_STRINGS.standardOrOccupationPlaceholder}
                 placeholderTextColor={COLORS.placeholder}
-                style={[styles.input, errors.standardOrOccupation && styles.inputError]}
+                style={[styles.input, errors.standard_occupation && styles.inputError]}
               />
             </FormField>
           </View>
@@ -469,22 +466,22 @@ export default function CustomerFormScreen({ onBack }: Props) {
           label={FORM_STRINGS.mobileNoLabel}
           subLabel={FORM_STRINGS.mobileNoSubLabel}
           required
-          error={errors.mobileNo}
+          error={errors.mobile_no}
           hint={FORM_STRINGS.mobileNoHint}
         >
           <View
             style={[
               styles.phoneInputContainer,
-              errors.mobileNo && styles.inputError,
+              errors.mobile_no && styles.inputError,
             ]}
           >
             <View style={styles.countryCodeBadge}>
               <Text style={styles.countryCodeText}>{FORM_STRINGS.countryCode}</Text>
             </View>
             <TextInput
-              value={formData.mobileNo}
+              value={formData.mobile_no}
               onChangeText={(v) =>
-                handleFieldChange("mobileNo", v.replace(/\D/g, "").slice(0, 10))
+                handleFieldChange("mobile_no", v.replace(/\D/g, "").slice(0, 10))
               }
               placeholder={FORM_STRINGS.mobileNoPlaceholder}
               placeholderTextColor={COLORS.placeholder}
@@ -502,15 +499,15 @@ export default function CustomerFormScreen({ onBack }: Props) {
               label={FORM_STRINGS.cityTownLabel}
               subLabel={FORM_STRINGS.cityTownSubLabel}
               required
-              error={errors.cityTown}
+              error={errors.city_town}
             >
               <TextInput
-                value={formData.cityTown}
-                onChangeText={(v) => handleFieldChange("cityTown", v)}
+                value={formData.city_town}
+                onChangeText={(v) => handleFieldChange("city_town", v)}
                 placeholder={FORM_STRINGS.cityTownPlaceholder}
                 placeholderTextColor={COLORS.placeholder}
                 autoCapitalize="words"
-                style={[styles.input, errors.cityTown && styles.inputError]}
+                style={[styles.input, errors.city_town && styles.inputError]}
               />
             </FormField>
           </View>
@@ -563,19 +560,19 @@ export default function CustomerFormScreen({ onBack }: Props) {
               label={FORM_STRINGS.aadharNoLabel}
               subLabel={FORM_STRINGS.aadharNoSubLabel}
               required
-              error={errors.aadharNo}
+              error={errors.aadhaar_number}
               hint={FORM_STRINGS.aadharNoHint}
             >
               <TextInput
-                value={formData.aadharNo}
+                value={formData.aadhaar_number}
                 onChangeText={(v) =>
-                  handleFieldChange("aadharNo", v.replace(/\D/g, "").slice(0, 12))
+                  handleFieldChange("aadhaar_number", v.replace(/\D/g, "").slice(0, 12))
                 }
                 placeholder={FORM_STRINGS.aadharNoPlaceholder}
                 placeholderTextColor={COLORS.placeholder}
                 keyboardType="number-pad"
                 maxLength={12}
-                style={[styles.input, errors.aadharNo && styles.inputError]}
+                style={[styles.input, errors.aadhaar_number && styles.inputError]}
               />
             </FormField>
           </View>
@@ -676,7 +673,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
               <View style={styles.summaryBox}>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryFullNameLabel}</Text>
-                  <Text style={styles.summaryValue}>{registeredSummary.fullName}</Text>
+                  <Text style={styles.summaryValue}>{registeredSummary.full_name}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryInstitutionLabel}</Text>
@@ -690,7 +687,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryDobLabel}</Text>
-                  <Text style={styles.summaryValue}>{registeredSummary.dob}</Text>
+                  <Text style={styles.summaryValue}>{registeredSummary.date_of_birth}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryCategoryLabel}</Text>
@@ -699,19 +696,19 @@ export default function CustomerFormScreen({ onBack }: Props) {
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryMobileLabel}</Text>
                   <Text style={styles.summaryValue}>
-                    {FORM_STRINGS.countryCode} {registeredSummary.mobileNo}
+                    {FORM_STRINGS.countryCode} {registeredSummary.mobile_no}
                   </Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryAadharLabel}</Text>
                   <Text style={styles.summaryValue}>
-                    XXXX-XXXX-{registeredSummary.aadharNo.slice(-4)}
+                    XXXX-XXXX-{registeredSummary.aadhaar_number.slice(-4)}
                   </Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>{FORM_STRINGS.summaryLocationLabel}</Text>
                   <Text style={styles.summaryValue}>
-                    {registeredSummary.cityTown}, {registeredSummary.district} - {registeredSummary.pincode}
+                    {registeredSummary.city_town}, {registeredSummary.district} - {registeredSummary.pincode}
                   </Text>
                 </View>
               </View>
