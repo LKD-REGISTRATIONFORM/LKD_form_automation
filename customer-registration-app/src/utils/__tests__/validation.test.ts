@@ -28,15 +28,15 @@ const calculatedAge = calculateAgeFromDob(pastDob);
 assert(calculatedAge !== null && calculatedAge > 18, "Age should be > 18 for year 2005");
 
 // Test Full Name validation
-assert(validateField("fullName", "", INITIAL_FORM_DATA) !== null, "Empty name should be invalid");
-assert(validateField("fullName", "R", INITIAL_FORM_DATA) !== null, "Single letter name should be invalid");
-assert(validateField("fullName", "Rahul Ramesh Deshmukh", INITIAL_FORM_DATA) === null, "Valid name should pass");
+assert(validateField("full_name", "", INITIAL_FORM_DATA) !== null, "Empty name should be invalid");
+assert(validateField("full_name", "R", INITIAL_FORM_DATA) !== null, "Single letter name should be invalid");
+assert(validateField("full_name", "Rahul Ramesh Deshmukh", INITIAL_FORM_DATA) === null, "Valid name should pass");
 
 // Test Mobile No validation (10 boxes)
-assert(validateField("mobileNo", "", INITIAL_FORM_DATA) !== null, "Empty mobile should be invalid");
-assert(validateField("mobileNo", "12345", INITIAL_FORM_DATA) !== null, "Short mobile should be invalid");
-assert(validateField("mobileNo", "1234567890", INITIAL_FORM_DATA) !== null, "Mobile starting with 1 should be invalid");
-assert(validateField("mobileNo", "9876543210", INITIAL_FORM_DATA) === null, "10-digit mobile starting with 9 should pass");
+assert(validateField("mobile_no", "", INITIAL_FORM_DATA) !== null, "Empty mobile should be invalid");
+assert(validateField("mobile_no", "12345", INITIAL_FORM_DATA) !== null, "Short mobile should be invalid");
+assert(validateField("mobile_no", "1234567890", INITIAL_FORM_DATA) !== null, "Mobile starting with 1 should be invalid");
+assert(validateField("mobile_no", "9876543210", INITIAL_FORM_DATA) === null, "10-digit mobile starting with 9 should pass");
 
 // Test Pincode validation (6 boxes)
 assert(validateField("pincode", "44001", INITIAL_FORM_DATA) !== null, "5-digit pincode should fail");
@@ -44,8 +44,8 @@ assert(validateField("pincode", "044001", INITIAL_FORM_DATA) !== null, "Pincode 
 assert(validateField("pincode", "440025", INITIAL_FORM_DATA) === null, "Valid 6-digit pincode should pass");
 
 // Test Aadhar No validation (12 boxes)
-assert(validateField("aadharNo", "123456789", INITIAL_FORM_DATA) !== null, "Aadhar < 12 digits should fail");
-assert(validateField("aadharNo", "123456789012", INITIAL_FORM_DATA) === null, "12-digit Aadhar should pass");
+assert(validateField("aadhaar_number", "123456789", INITIAL_FORM_DATA) !== null, "Aadhar < 12 digits should fail");
+assert(validateField("aadhaar_number", "123456789012", INITIAL_FORM_DATA) === null, "12-digit Aadhar should pass");
 
 // Test Category selection
 assert(validateField("category", "", INITIAL_FORM_DATA) !== null, "Empty category should fail");
@@ -57,22 +57,22 @@ assert(validateField("consent", true, INITIAL_FORM_DATA) === null, "Checked cons
 
 // Test complete valid form matching Lokkalyan Diagnostics paper form
 const validLkdRecord: CustomerFormData = {
-  campDate: "29/10/2026",
-  srNo: "101",
+  camp_date: "29/10/2026",
+  sr_no: "101",
   institution: "Dharampeth Science College",
-  fullName: "Rahul Ramesh Deshmukh",
-  dob: "15/05/2005",
+  full_name: "Rahul Ramesh Deshmukh",
+  date_of_birth: "15/05/2005",
   age: "21",
   gender: "Male",
   caste: "Maratha",
   category: "General",
   religion: "Hindu",
-  standardOrOccupation: "12th Science",
-  mobileNo: "9876543210",
-  cityTown: "Nagpur",
+  standard_occupation: "12th Science",
+  mobile_no: "9876543210",
+  city_town: "Nagpur",
   district: "Nagpur",
   pincode: "440025",
-  aadharNo: "123456789012",
+  aadhaar_number: "123456789012",
   consent: true,
 };
 

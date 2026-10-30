@@ -37,51 +37,51 @@ export const VALIDATION_LIMITS = {
 
 export interface CustomerFormData {
   // Camp Information
-  campDate: string; // Date (दिनांक)
-  srNo: string; // Sr.No (अनुक्रमांक)
+  camp_date: string; // Date (दिनांक), form-only
+  sr_no: string; // Sr.No (अनुक्रमांक), form-only
   institution: string; // School / College / Institution (शाळा / महाविद्यालय / संस्था)
 
   // Personal Information
-  fullName: string; // Full Name (पूर्ण नाव)
-  dob: string; // Date of Birth (जन्मतारीख) - DD/MM/YYYY
+  full_name: string; // Full Name (पूर्ण नाव)
+  date_of_birth: string; // Date of Birth (जन्मतारीख) - DD/MM/YYYY
   age: string; // Age (वय) - auto-calculated from DOB
   gender: string; // Gender (लिंग) - Male / Female / Other
   caste: string; // Caste (जात)
   category: string; // Category (श्रेणी) - SC / ST / OBC / NT / SBC / VJ / General
   religion: string; // Religion (धर्म)
-  standardOrOccupation: string; // Standard / Occupation (वर्ग / व्यवसाय)
+  standard_occupation: string; // Standard / Occupation (वर्ग / व्यवसाय)
 
   // Contact Information
-  mobileNo: string; // Mobile No. (मोबाईल क्र.) [10 digits]
+  mobile_no: string; // Mobile No. (मोबाईल क्र.) [10 digits]
 
   // Address Details
-  cityTown: string; // City / Town (शहर / गाव)
+  city_town: string; // City / Town (शहर / गाव)
   district: string; // Dist. (जिल्हा)
   pincode: string; // Pincode (पिन कोड) [6 digits]
 
   // Identification
-  aadharNo: string; // Aadhar No. (आधार नं.) [12 digits]
+  aadhaar_number: string; // Aadhaar No. (आधार नं.) [12 digits]
 
   // Consent
   consent: boolean; // "I hereby voluntarily consent to collect blood sample for blood test CBC as a self referral"
 }
 
 export const INITIAL_FORM_DATA: CustomerFormData = {
-  campDate: "",
-  srNo: "",
+  camp_date: "",
+  sr_no: "",
   institution: "",
-  fullName: "",
-  dob: "",
+  full_name: "",
+  date_of_birth: "",
   age: "",
   gender: "",
   caste: "",
   category: "",
   religion: "",
-  standardOrOccupation: "",
-  mobileNo: "",
-  cityTown: "",
+  standard_occupation: "",
+  mobile_no: "",
+  city_town: "",
   district: "Nagpur", // Pre-populated for LKD Nagpur camp convenience
   pincode: "",
-  aadharNo: "",
+  aadhaar_number: "",
   consent: false,
 };

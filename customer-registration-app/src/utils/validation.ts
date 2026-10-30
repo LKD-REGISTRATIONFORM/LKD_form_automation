@@ -76,7 +76,7 @@ export function validateField(
   data: CustomerFormData
 ): string | null {
   switch (field) {
-    case "campDate": {
+    case "camp_date": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "Camp date is required.";
@@ -96,7 +96,7 @@ export function validateField(
       return null;
     }
 
-    case "srNo": {
+    case "sr_no": {
       // Serial number is optional or alphanumeric
       return null;
     }
@@ -112,7 +112,7 @@ export function validateField(
       return null;
     }
 
-    case "fullName": {
+    case "full_name": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "Full name (पूर्ण नाव) is required.";
@@ -126,7 +126,7 @@ export function validateField(
       return null;
     }
 
-    case "dob": {
+    case "date_of_birth": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "Date of birth (जन्मतारीख) is required.";
@@ -169,8 +169,8 @@ export function validateField(
         return `Age must be between ${VALIDATION_LIMITS.minAge} and ${VALIDATION_LIMITS.maxAge}.`;
       }
       // Check if matches DOB if DOB entered
-      if (data.dob && /^\d{2}\/\d{2}\/\d{4}$/.test(data.dob)) {
-        const expectedAge = calculateAgeFromDob(data.dob);
+      if (data.date_of_birth && /^\d{2}\/\d{2}\/\d{4}$/.test(data.date_of_birth)) {
+        const expectedAge = calculateAgeFromDob(data.date_of_birth);
         if (expectedAge !== null && Math.abs(expectedAge - num) > 1) {
           return `Age (${num}) does not match date of birth (${expectedAge} years).`;
         }
@@ -205,7 +205,7 @@ export function validateField(
       return null;
     }
 
-    case "standardOrOccupation": {
+    case "standard_occupation": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "Standard / Occupation (वर्ग / व्यवसाय) is required.";
@@ -213,7 +213,7 @@ export function validateField(
       return null;
     }
 
-    case "mobileNo": {
+    case "mobile_no": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "Mobile number (मोबाईल क्र.) is required.";
@@ -227,7 +227,7 @@ export function validateField(
       return null;
     }
 
-    case "cityTown": {
+    case "city_town": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "City / Town (शहर / गाव) is required.";
@@ -263,7 +263,7 @@ export function validateField(
       return null;
     }
 
-    case "aadharNo": {
+    case "aadhaar_number": {
       const trimmed = (value || "").trim();
       if (!trimmed) {
         return "Aadhar number (आधार नं.) is required.";
