@@ -1,62 +1,15 @@
 import {
+  CustomerFormData,
+  INITIAL_FORM_DATA,
+} from "../../constants/formConstants";
+import {
   calculateAgeFromDob,
-  formatDate,
   parseDateString,
   validateCustomerForm,
   validateField,
 } from "../validation";
-import { CustomerFormData, INITIAL_FORM_DATA } from "../../constants/formConstants";
 
-function assert(condition: boolean, message: string) {
-  if (!condition) {
-    throw new Error(`Assertion failed: ${message}`);
-  }
-}
-
-console.log("Running LKD validation tests...");
-
-// Test parseDateString
-assert(parseDateString("29/10/2026") !== null, "Should parse valid date");
-assert(parseDateString("31/02/2026") === null, "Should reject Feb 31");
-assert(parseDateString("29/02/2024") !== null, "Should accept leap year Feb 29");
-assert(parseDateString("29/02/2023") === null, "Should reject non-leap year Feb 29");
-assert(parseDateString("invalid") === null, "Should reject invalid string");
-
-// Test Automatic Age Calculation from Date of Birth ("automatic age cal.")
-const pastDob = "15/05/2005";
-const calculatedAge = calculateAgeFromDob(pastDob);
-assert(calculatedAge !== null && calculatedAge > 18, "Age should be > 18 for year 2005");
-
-// Test Full Name validation
-assert(validateField("full_name", "", INITIAL_FORM_DATA) !== null, "Empty name should be invalid");
-assert(validateField("full_name", "R", INITIAL_FORM_DATA) !== null, "Single letter name should be invalid");
-assert(validateField("full_name", "Rahul Ramesh Deshmukh", INITIAL_FORM_DATA) === null, "Valid name should pass");
-
-// Test Mobile No validation (10 boxes)
-assert(validateField("mobile_no", "", INITIAL_FORM_DATA) !== null, "Empty mobile should be invalid");
-assert(validateField("mobile_no", "12345", INITIAL_FORM_DATA) !== null, "Short mobile should be invalid");
-assert(validateField("mobile_no", "1234567890", INITIAL_FORM_DATA) !== null, "Mobile starting with 1 should be invalid");
-assert(validateField("mobile_no", "9876543210", INITIAL_FORM_DATA) === null, "10-digit mobile starting with 9 should pass");
-
-// Test Pincode validation (6 boxes)
-assert(validateField("pincode", "44001", INITIAL_FORM_DATA) !== null, "5-digit pincode should fail");
-assert(validateField("pincode", "044001", INITIAL_FORM_DATA) !== null, "Pincode starting with 0 should fail");
-assert(validateField("pincode", "440025", INITIAL_FORM_DATA) === null, "Valid 6-digit pincode should pass");
-
-// Test Aadhar No validation (12 boxes)
-assert(validateField("aadhaar_number", "123456789", INITIAL_FORM_DATA) !== null, "Aadhar < 12 digits should fail");
-assert(validateField("aadhaar_number", "123456789012", INITIAL_FORM_DATA) === null, "12-digit Aadhar should pass");
-
-// Test Category selection
-assert(validateField("category", "", INITIAL_FORM_DATA) !== null, "Empty category should fail");
-assert(validateField("category", "OBC", INITIAL_FORM_DATA) === null, "Valid category should pass");
-
-// Test Consent
-assert(validateField("consent", false, INITIAL_FORM_DATA) !== null, "Unchecked consent should fail");
-assert(validateField("consent", true, INITIAL_FORM_DATA) === null, "Checked consent should pass");
-
-// Test complete valid form matching Lokkalyan Diagnostics paper form
-const validLkdRecord: CustomerFormData = {
+const validRecord: CustomerFormData = {
   camp_date: "29/10/2026",
   sr_no: "101",
   institution: "Dharampeth Science College",
@@ -76,7 +29,79 @@ const validLkdRecord: CustomerFormData = {
   consent: true,
 };
 
-const errors = validateCustomerForm(validLkdRecord);
-assert(Object.keys(errors).length === 0, `Valid form produced errors: ${JSON.stringify(errors)}`);
+describe("parseDateString", () => {
+  it("accepts real calendar dates, including a leap day", () => {
+    expect(parseDateString("29/10/2026")).not.toBeNull();
+    expect(parseDateString("29/02/2024")).not.toBeNull();
+  });
 
-console.log("All LKD validation tests passed successfully!");
+  it.each(["31/02/2026", "29/02/2023", "invalid", ""])(
+    "rejects %p",
+    (value) => {
+      expect(parseDateString(value)).toBeNull();
+    }
+  );
+});
+
+describe("calculateAgeFromDob", () => {
+  it("calculates age in full years", () => {
+    expect(calculateAgeFromDob("15/05/2005")).toBeGreaterThan(18);
+  });
+
+  it("returns null for an invalid date", () => {
+    expect(calculateAgeFromDob("not a date")).toBeNull();
+  });
+});
+
+describe("validateField", () => {
+  const error = (field: keyof CustomerFormData, value: string | boolean) =>
+    validateField(field, value, INITIAL_FORM_DATA);
+
+  it.each([
+    ["sr_no", ""],
+    ["caste", ""],
+    ["caste", "R"],
+    ["religion", ""],
+    ["full_name", ""],
+    ["full_name", "R"],
+    ["category", ""],
+    ["gender", ""],
+    ["mobile_no", ""],
+    ["mobile_no", "12345"],
+    ["mobile_no", "1234567890"],
+    ["pincode", "44001"],
+    ["pincode", "044001"],
+    ["aadhaar_number", "123456789"],
+    ["consent", false],
+  ] as const)("rejects %s = %p", (field, value) => {
+    expect(error(field, value)).not.toBeNull();
+  });
+
+  it.each([
+    ["sr_no", "101"],
+    ["caste", "Maratha"],
+    ["religion", "Hindu"],
+    ["full_name", "Rahul Ramesh Deshmukh"],
+    ["category", "OBC"],
+    ["mobile_no", "9876543210"],
+    ["pincode", "440025"],
+    ["aadhaar_number", "123456789012"],
+    ["consent", true],
+  ] as const)("accepts %s = %p", (field, value) => {
+    expect(error(field, value)).toBeNull();
+  });
+});
+
+describe("validateCustomerForm", () => {
+  it("has no errors for a complete valid record", () => {
+    expect(validateCustomerForm(validRecord)).toEqual({});
+  });
+
+  it.each(["sr_no", "caste", "religion", "consent"] as const)(
+    "reports an error when %s is missing",
+    (field) => {
+      const blank = { ...validRecord, [field]: INITIAL_FORM_DATA[field] };
+      expect(validateCustomerForm(blank)[field]).toBeDefined();
+    }
+  );
+});

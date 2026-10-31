@@ -97,7 +97,10 @@ export function validateField(
     }
 
     case "sr_no": {
-      // Serial number is optional or alphanumeric
+      const trimmed = (value || "").trim();
+      if (!trimmed) {
+        return "Sr. No. (अनुक्रमांक) is required.";
+      }
       return null;
     }
 
@@ -187,7 +190,10 @@ export function validateField(
 
     case "caste": {
       const trimmed = (value || "").trim();
-      if (trimmed && trimmed.length < 2) {
+      if (!trimmed) {
+        return "Caste (जात) is required.";
+      }
+      if (trimmed.length < 2) {
         return "Caste must be at least 2 characters.";
       }
       return null;
@@ -201,7 +207,9 @@ export function validateField(
     }
 
     case "religion": {
-      // Optional
+      if (!value || !value.trim()) {
+        return "Please select religion (धर्म).";
+      }
       return null;
     }
 

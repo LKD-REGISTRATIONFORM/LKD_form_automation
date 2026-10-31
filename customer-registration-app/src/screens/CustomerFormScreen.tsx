@@ -240,7 +240,7 @@ export default function CustomerFormScreen({ onBack }: Props) {
             <FormField
               label={FORM_STRINGS.srNoLabel}
               subLabel={FORM_STRINGS.srNoSubLabel}
-              optional
+              required
               error={errors.sr_no}
             >
               <TextInput
