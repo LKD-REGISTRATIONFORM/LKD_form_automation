@@ -8,7 +8,6 @@ def get_db_connection():
     """Open a PostgreSQL connection for one operation."""
     return psycopg.connect(DATABASE_URL)
 
-
 def check_db_connection() -> bool:
     """Return True if PostgreSQL can execute a simple query."""
     try:
