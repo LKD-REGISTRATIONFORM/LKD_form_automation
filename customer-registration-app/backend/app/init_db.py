@@ -12,31 +12,30 @@ def create_tables():
                     -- Internal ID for updates and synchronization.
                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
-                    institution TEXT,
+                    institution TEXT NOT NULL,
                     full_name TEXT NOT NULL,
-                    date_of_birth DATE,
+                    date_of_birth DATE NOT NULL,
 
-                    gender TEXT CHECK (
+                    gender TEXT NOT NULL CHECK (
                         gender IN ('Male', 'Female', 'Other')
-                        OR gender IS NULL
                     ),
 
-                    caste TEXT,
+                    caste TEXT NOT NULL,
 
-                    category TEXT CHECK (
+                    category TEXT NOT NULL CHECK (
                         category IN (
                             'SC', 'ST', 'OBC', 'NT',
                             'SBC', 'VJ', 'General'
-                        ) OR category IS NULL
+                        )
                     ),
 
-                    religion TEXT,
-                    standard_occupation TEXT,
-                    mobile_no TEXT,
-                    city_town TEXT,
-                    district TEXT,
-                    pincode TEXT,
-                    aadhaar_number TEXT,
+                    religion TEXT NOT NULL,
+                    standard_occupation TEXT NOT NULL,
+                    mobile_no TEXT NOT NULL,
+                    city_town TEXT NOT NULL,
+                    district TEXT NOT NULL,
+                    pincode TEXT NOT NULL,
+                    aadhaar_number TEXT NOT NULL,
 
                     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
