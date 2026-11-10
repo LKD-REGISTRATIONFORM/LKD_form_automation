@@ -12,6 +12,9 @@ def create_tables():
                     -- Internal ID for updates and synchronization.
                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
+                    camp_date DATE NOT NULL,
+                    sr_no TEXT NOT NULL,
+
                     institution TEXT NOT NULL,
                     full_name TEXT NOT NULL,
                     date_of_birth DATE NOT NULL,

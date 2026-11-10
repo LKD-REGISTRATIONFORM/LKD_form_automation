@@ -10,6 +10,8 @@ class CustomerCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     # All customer registration fields are required.
+    camp_date: date
+    sr_no: str = Field(min_length=1, max_length=50)
     institution: str = Field(max_length=200)
     full_name: str = Field(min_length=1, max_length=200)
     date_of_birth: date
@@ -23,6 +25,13 @@ class CustomerCreate(BaseModel):
     district: str = Field(max_length=100)
     pincode: str = Field(max_length=6)
     aadhaar_number: str = Field(max_length=12)
+
+    @field_validator("camp_date")
+    @classmethod
+    def validate_camp_date(cls, value):
+        if value > date.today():
+            raise ValueError("Camp date cannot be in the future")
+        return value
 
     @field_validator("full_name")
     @classmethod

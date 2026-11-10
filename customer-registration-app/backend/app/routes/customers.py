@@ -24,12 +24,12 @@ def add_customer(customer: CustomerCreate):
 
     query = """
         INSERT INTO customers (
-            institution, full_name, date_of_birth, gender,
+            camp_date, sr_no, institution, full_name, date_of_birth, gender,
             caste, category, religion, standard_occupation,
             mobile_no, city_town, district, pincode, aadhaar_number
         )
         VALUES (
-            %(institution)s, %(full_name)s, %(date_of_birth)s, %(gender)s,
+            %(camp_date)s, %(sr_no)s, %(institution)s, %(full_name)s, %(date_of_birth)s, %(gender)s,
             %(caste)s, %(category)s, %(religion)s, %(standard_occupation)s,
             %(mobile_no)s, %(city_town)s, %(district)s, %(pincode)s,
             %(aadhaar_number)s
