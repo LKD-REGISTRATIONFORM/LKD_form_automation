@@ -4,7 +4,9 @@ from contextlib import asynccontextmanager
 
 import psycopg
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
+from app.config import CORS_ORIGINS
 from app.database import check_db_connection
 from app.init_db import create_tables
 from app.routes.customers import router as customers_router
@@ -29,6 +31,15 @@ app = FastAPI(
     description="Backend for customer registration and record management.",
     version="0.1.0",
     lifespan=lifespan,
+)
+
+# Let the web build of the app (running on another origin) call this API.
+# Only the origins listed in CORS_ORIGINS are allowed, never "*".
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # Register customer endpoints.
