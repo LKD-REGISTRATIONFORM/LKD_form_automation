@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import { ApiError, createCustomer } from "../api/customers";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdown from "../components/CustomDropdown";
 import FormField from "../components/FormField";
@@ -48,6 +49,9 @@ export default function CustomerFormScreen({ onBack }: Props) {
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [registeredSummary, setRegisteredSummary] = useState<CustomerFormData | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Problem reported by the server (or the network) when saving fails.
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   /**
    * Updates a single field and triggers automatic age calculation when DOB is entered.
@@ -98,11 +102,18 @@ export default function CustomerFormScreen({ onBack }: Props) {
     });
     setErrors({});
     setHasAttemptedSubmit(false);
+    setSubmitError(null);
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    // Ignore taps while a save is already in progress (prevents duplicates).
+    if (isSubmitting) {
+      return;
+    }
+
     setHasAttemptedSubmit(true);
+    setSubmitError(null);
 
     const validationErrors = validateCustomerForm(formData);
     setErrors(validationErrors);
@@ -113,8 +124,19 @@ export default function CustomerFormScreen({ onBack }: Props) {
       return;
     }
 
-    setRegisteredSummary({ ...formData });
-    setSuccessModalVisible(true);
+    setIsSubmitting(true);
+    try {
+      await createCustomer(formData);
+      // Only show success once the server has really saved the record.
+      setRegisteredSummary({ ...formData });
+      setSuccessModalVisible(true);
+    } catch (error) {
+      setSubmitError(
+        error instanceof ApiError ? error.message : FORM_STRINGS.saveFailed
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const errorCount = Object.keys(errors).length;
@@ -628,16 +650,32 @@ export default function CustomerFormScreen({ onBack }: Props) {
 
       {/* Submission Buttons */}
       <View style={styles.buttonContainer}>
+        {submitError && (
+          <View style={styles.errorSummaryBox}>
+            <View style={styles.errorSummaryHeader}>
+              <Text style={styles.errorSummaryIcon}>⚠</Text>
+              <Text style={styles.errorSummaryTitle}>
+                {FORM_STRINGS.saveFailedTitle}
+              </Text>
+            </View>
+            <Text style={styles.errorSummaryItem}>{submitError}</Text>
+          </View>
+        )}
+
         <Pressable
           onPress={handleSubmit}
+          disabled={isSubmitting}
           style={({ pressed }) => [
             styles.submitButton,
-            pressed && styles.submitButtonPressed,
+            (pressed || isSubmitting) && styles.submitButtonPressed,
           ]}
           accessibilityRole="button"
           accessibilityLabel={FORM_STRINGS.submitAccessibilityLabel}
+          accessibilityState={{ disabled: isSubmitting }}
         >
-          <Text style={styles.submitText}>{FORM_STRINGS.submitButton}</Text>
+          <Text style={styles.submitText}>
+            {isSubmitting ? FORM_STRINGS.savingButton : FORM_STRINGS.submitButton}
+          </Text>
         </Pressable>
 
         <Pressable
