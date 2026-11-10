@@ -95,3 +95,42 @@ The server returns `201 Created` and a server-calculated age:
 ```
 
 Validation failures use FastAPI's `422 Unprocessable Entity` response format.
+
+## Other customer endpoints
+
+All paths are under `/api/v1/customers`. `{id}` is the UUID returned when the
+customer was created; a malformed id returns `422` and an unknown id `404`.
+
+| Method and path | Purpose | Success |
+| --- | --- | --- |
+| `GET /` | List customers, newest first | `200` |
+| `GET /{id}` | Get one customer | `200` |
+| `PUT /{id}` | Replace a customer. Send every field, validated like `POST` | `200` |
+| `DELETE /{id}` | Permanently delete a customer | `204`, no body |
+
+### List query parameters
+
+| Parameter | Default | Rules |
+| --- | --- | --- |
+| `q` | none | Case-insensitive search in `full_name`, `mobile_no` and `sr_no`. |
+| `limit` | `20` | 1 to 100. |
+| `offset` | `0` | 0 or more. |
+
+```json
+{ "items": [ { "id": "…", "age": 20, "…": "all fields, plus created_at and updated_at" } ],
+  "total": 42, "limit": 20, "offset": 0 }
+```
+
+`total` counts every match, not just the current page. `GET /{id}` and `PUT`
+return one customer in the same shape as a list item.
+
+## Running the backend tests
+
+```bash
+cd customer-registration-app/backend
+pytest
+```
+
+The tests use their own database (`customer_registration_test`) on the same
+PostgreSQL server. It is created automatically and your development data is
+never touched.

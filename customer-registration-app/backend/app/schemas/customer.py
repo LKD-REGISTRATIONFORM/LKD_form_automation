@@ -1,5 +1,6 @@
 
-from datetime import date
+from datetime import date, datetime
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -88,3 +89,40 @@ class CustomerCreate(BaseModel):
         if len(value) != 12 or not value.isdigit():
             raise ValueError("Aadhaar number must contain 12 digits")
         return value
+
+
+class CustomerOut(BaseModel):
+    """A customer as returned by the API.
+
+    This model has no validators on purpose: it only describes data that is
+    already stored, so it should never reject a row read from the database.
+    """
+
+    id: UUID
+    camp_date: date
+    sr_no: str
+    institution: str
+    full_name: str
+    date_of_birth: date
+    age: int  # Calculated from date_of_birth, never stored.
+    gender: str
+    caste: str
+    category: str
+    religion: str
+    standard_occupation: str
+    mobile_no: str
+    city_town: str
+    district: str
+    pincode: str
+    aadhaar_number: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class CustomerList(BaseModel):
+    """One page of customers plus the total number of matches."""
+
+    items: list[CustomerOut]
+    total: int
+    limit: int
+    offset: int
