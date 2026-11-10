@@ -48,3 +48,6 @@ __pycache__/
 
 # Local database credentials
 backend/.env
+
+# Local API address (see .env.example)
+.env

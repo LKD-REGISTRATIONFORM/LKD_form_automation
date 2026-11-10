@@ -6,6 +6,9 @@ export const FORM_STRINGS = {
   cancelExitButton: "Cancel & Exit",
   submitButton: "Validate & Save Record",
   submitAccessibilityLabel: "Submit and Save Record",
+  savingButton: "Saving…",
+  saveFailedTitle: "Could not save this record",
+  saveFailed: "Something went wrong while saving. Please try again.",
 
   // Header Banner
   campPillText: "Free Blood Testing Camp • To Screen Youth for Anaemia",
