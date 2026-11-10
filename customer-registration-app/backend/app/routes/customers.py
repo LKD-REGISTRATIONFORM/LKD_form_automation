@@ -1,3 +1,4 @@
+import logging
 from datetime import date
 from uuid import UUID
 
@@ -7,6 +8,7 @@ from psycopg.rows import dict_row
 from app.database import get_db_connection
 from app.schemas.customer import CustomerCreate, CustomerList, CustomerOut
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/customers", tags=["Customers"])
 
 # Columns a client can send. Used by both INSERT and UPDATE so the two
@@ -35,8 +37,10 @@ def to_customer(row: dict) -> dict:
 
 def server_error() -> HTTPException:
     # Don't expose internal database details to API clients.
-    # Add secure server-side error logging before production.
-    return HTTPException(status_code=500, detail="Database error")
+    return HTTPException(
+        status_code=500,
+        detail="Could not register customer"
+    )
 
 
 def not_found() -> HTTPException:
@@ -61,6 +65,7 @@ def add_customer(customer: CustomerCreate):
                 cursor.execute(query, customer.model_dump())
                 row = cursor.fetchone()
     except Exception:
+        logger.exception("Could not register customer")
         raise server_error()
 
     return {
@@ -110,6 +115,7 @@ def list_customers(
                 )
                 rows = cursor.fetchall()
     except Exception:
+        logger.exception("Could not retrieve customers")
         raise server_error()
 
     return {
@@ -133,6 +139,7 @@ def get_customer(customer_id: UUID):
                 )
                 row = cursor.fetchone()
     except Exception:
+        logger.exception("Could not retrieve customer")
         raise server_error()
 
     # Raised outside the try block so the generic handler can't swallow it.
@@ -162,6 +169,7 @@ def update_customer(customer_id: UUID, customer: CustomerCreate):
                 )
                 row = cursor.fetchone()
     except Exception:
+        logger.exception("Could not update customer")
         raise server_error()
 
     if row is None:
@@ -186,6 +194,7 @@ def delete_customer(customer_id: UUID):
                 )
                 deleted = cursor.fetchone()
     except Exception:
+        logger.exception("Could not delete customer")
         raise server_error()
 
     if deleted is None:
