@@ -24,6 +24,8 @@ Content-Type: application/json
 
 | Form state key | API key | JSON type | Rules |
 | --- | --- | --- | --- |
+| `camp_date` | `camp_date` | ISO date string (`YYYY-MM-DD`) | Required. The UI's `DD/MM/YYYY` value must be converted before sending. It cannot be in the future. |
+| `sr_no` | `sr_no` | string | Required; trimmed, 1 to 50 characters. |
 | `institution` | `institution` | string or `null` | Maximum 200 characters. |
 | `full_name` | `full_name` | string | Required; trimmed, 1 to 200 characters. |
 | `date_of_birth` | `date_of_birth` | ISO date string (`YYYY-MM-DD`) or `null` | The UI's `DD/MM/YYYY` value must be converted before sending. It cannot be in the future. |
@@ -50,8 +52,6 @@ must **not** be sent to `POST /api/v1/customers` until both the database and
 
 | Form state key | Reason |
 | --- | --- |
-| `camp_date` | No `camp_date` column or request field exists in PR #9. |
-| `sr_no` | No serial-number column or request field exists in PR #9. |
 | `consent` | No consent column or request field exists in PR #9. |
 | `age` | Derived from `date_of_birth` by the server; never submitted independently. |
 
@@ -63,6 +63,8 @@ prevents FastAPI from silently discarding values it does not persist.
 
 ```json
 {
+  "camp_date": "2026-10-29",
+  "sr_no": "101",
   "institution": "Government Polytechnic Nagpur",
   "full_name": "Rahul Ramesh Deshmukh",
   "date_of_birth": "2006-09-14",
